@@ -2,6 +2,8 @@
 
 # Above combination will ignore all files without extension
 
+bin/
+
 .vscode/ipch/*
 
 **.bin
