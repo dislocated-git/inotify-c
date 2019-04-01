@@ -3,8 +3,6 @@
 #include <stdlib.h>
 //Defines error number??
 #include <errno.h>
-//Struct types and stuff?
-#include <sys/types.h>
 //Inotify API
 #include <linux/inotify.h>
 //Signal handling
