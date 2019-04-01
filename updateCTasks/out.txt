@@ -1,8 +1,0 @@
-[1/4/2019 2:26:53] File test.txt was created.Event full path: 
-/home/main/Source/C/env/createProject/Tasks-C-global/test.txt
-[1/4/2019 2:26:53] File create1.sh was modified Event full path: 
-/home/main/Source/C/env/createProject/Tasks-C-global/create1.sh
-[1/4/2019 2:26:56] File test.txt was deleted. Event full path: 
-/home/main/Source/C/env/createProject/Tasks-C-global/test.txt
-
- received SIGINT
