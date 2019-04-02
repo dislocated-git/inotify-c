@@ -84,7 +84,8 @@ int main()
 
     // Add a watch for the directory
     // Watch for IN_MODIFY, IN_CREATE and IN_DELETE in createProject folder
-    watchDescriptor = inotify_add_watch(fileDescriptor, DIRECTORY_PATH, IN_CLOSE_WRITE | IN_CREATE | IN_DELETE);
+    watchDescriptor = inotify_add_watch(fileDescriptor, DIRECTORY_PATH, 
+    IN_CLOSE_WRITE | IN_CREATE | IN_DELETE | IN_DELETE_SELF | IN_MOVED_FROM | IN_MOVED_TO);
 
     //Do indefinately
     while (1)
@@ -106,11 +107,11 @@ int main()
             struct inotify_event *event = (struct inotify_event *)&buffer[i];
             if (event->len)
             {
-                if (event->mask & IN_CREATE)
+                if (event->mask & (IN_CREATE | IN_MOVED_TO))
                 {
                     on_file_created(event);
                 }
-                else if (event->mask & IN_DELETE)
+                else if (event->mask & (IN_DELETE | IN_DELETE_SELF | IN_MOVED_FROM))
                 {
                     on_file_deleted(event);
                 }
@@ -164,18 +165,17 @@ void on_file_closeWrite(struct inotify_event *event)
 void execute_command(char *commandPath, char *arg1, char *arg2)
 {
     /*Construct as string command*/
-
     int BUF_LEN = 100;
     //Buffer to allocate memory block for
     char *commandBuffer = malloc(BUF_LEN * sizeof(char));
 
-    int size = snprintf(commandBuffer, 400, "%s %s %s", commandPath, arg1, arg2);
+    int size = snprintf(commandBuffer, 400, "%s '%s' %s", commandPath, arg1, arg2);
 
     if (size >= BUF_LEN)
     {
         free(commandBuffer);
         char newCommandBuffer[size + 1];
-        snprintf(newCommandBuffer, (size + 1) * sizeof(char), "%s %s %s", commandPath, arg1, arg2);
+        snprintf(newCommandBuffer, (size + 1) * sizeof(char), "%s '%s' %s", commandPath, arg1, arg2);
         system(newCommandBuffer);
     }
     else
